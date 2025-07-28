@@ -21,7 +21,7 @@ def exist(arr, num):
     l = 0
     r = len(arr) - 1
     while l <= r:
-        mid = l + ((r - l) >> 2)
+        mid = l + ((r - l) >> 1)
         if arr[mid] == num:
             return True
         elif arr[mid] < num:
