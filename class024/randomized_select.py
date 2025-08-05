@@ -33,7 +33,7 @@ def partition(arr, l, r, x):
         if arr[i] < x:
             swap(arr, i, a)
             i += 1
-            a += 1
+            a += 1  # 不要忘记 a++
         elif arr[i] == x:
             i += 1
         else:
