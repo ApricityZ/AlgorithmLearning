@@ -1,6 +1,10 @@
 # // 不用任何算术运算，只用位运算实现加减乘除
 # // 代码实现中你找不到任何一个算术运算符
 # // 测试链接 : https://leetcode.cn/problems/divide-two-integers/
+# 最终的黄金法则
+# 您可以将我们的整个对话浓缩为这条黄金法则：
+#
+# 当用 Python 模拟定长整数运算时，你必须主动、持续地通过 & mask 操作来“丢弃”那些在定长世界中本应丢失的信息。这是从 Python 的“无限”数学世界，通往“有限”硬件世界的唯一路径，也是保证算法正确性的不二法门。
 
 class Solution:
     def __init__(self):
@@ -241,6 +245,45 @@ class Solution:
 
         # 对最终的位模式进行转换后再返回
         return self._to_signed_int(result_pattern)
+
+    def floor_divide(self, dividend: int, divisor: int) -> int:
+        """
+        使用位运算实现向负无穷取整的除法 (Python's // operator)。
+        """
+        # 步骤 1: 先计算出向零取整的结果
+        q_trunc = self.divide(dividend, divisor)
+
+        # 步骤 2: 判断是否需要修正
+
+        # 条件 a: 符号是否不同
+        signs_are_different = (((dividend >> 31) & 1) ^ ((divisor >> 31) & 1)) != 0
+
+        # 条件 b: 是否存在余数 (余数 r = a - q * b)
+        remainder = self.minus(dividend, self.multiply(q_trunc, divisor))
+        remainder_is_not_zero = (remainder != 0)
+
+        # 步骤 3 & 4: 如果同时满足两个条件，则减1；否则返回原结果
+        if signs_are_different and remainder_is_not_zero:
+            return self.minus(q_trunc, 1)
+        else:
+            return q_trunc
+
+# --- 测试 ---
+s = Solution()
+
+print("向零取整 (Truncation):")
+print(f" 7 /  3 = {s.divide(7, 3)}")
+print(f"-7 /  3 = {s.divide(-7, 3)}")
+print(f" 7 / -3 = {s.divide(7, -3)}")
+print(f"-7 / -3 = {s.divide(-7, -3)}")
+print(f"-10/  2 = {s.divide(-10, 2)}") # 能整除
+
+print("\n向负无穷取整 (Floor Division):")
+print(f" 7 //  3 = {s.floor_divide(7, 3)}")
+print(f"-7 //  3 = {s.floor_divide(-7, 3)}") # <-- 结果不同
+print(f" 7 // -3 = {s.floor_divide(7, -3)}") # <-- 结果不同
+print(f"-7 // -3 = {s.floor_divide(-7, -3)}")
+print(f"-10//  2 = {s.floor_divide(-10, 2)}") # 能整除
 
 
 s = Solution()
