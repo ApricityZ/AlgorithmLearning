@@ -9,6 +9,12 @@ class BitOperationBasicOperation:
         self._min_value = (1 << 31)
         self._max_value = self._min_value ^ self._mask
 
+    #########
+    # 底层的加减乘除中，我们都将其视为正数（无符号数）进行处理，这一点是通过与mask相与完成的；
+    # 在底层运算结束后，再将其转为有符号数
+    # https://g.co/gemini/share/6d4f4edfec42   可以参考这个连接
+    #########
+
     def _add(self, a, b):
         a &= self._mask
         b &= self._mask
@@ -56,6 +62,7 @@ class BitOperationBasicOperation:
         num &= self._mask
         if (num >> 31) & 1:
             return ~(num ^ self._mask)
+            # 这里括号内使用num是由于num实则二进制无限长，使用异或运算不会改变位宽，防止python自动进位，在Java中可以写~(~num)，当然Java中的有符号数不需要这个操作
         return num
 
     def add(self, a, b):
