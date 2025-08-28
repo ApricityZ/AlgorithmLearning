@@ -20,7 +20,7 @@ class Solution:
         self._rob(root)
         return max(self.yes, self.no)
 
-    def _rob(self, root: Optional[TreeNode]) -> int:
+    def _rob(self, root: Optional[TreeNode]) -> None:
         if root is None:
             self.yes = 0
             self.no = 0
